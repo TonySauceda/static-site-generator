@@ -2,6 +2,7 @@ using StaticSiteGenerator.Commands;
 using StaticSiteGenerator.Test.Utils;
 using System;
 using Xunit;
+using Shouldly;
 
 namespace StaticSiteGenerator.Test
 {
@@ -10,13 +11,16 @@ namespace StaticSiteGenerator.Test
         [Fact]
         public void TestWriteToConsole()
         {
+            // Setup
             var testConsole = new TestConsole();
             var buildCommand = new BuildCommand(testConsole);
 
+            // Act
             buildCommand.OnExecute();
 
+            // Assert
             string result = testConsole.GetWrittenContent();
-            Assert.Equal($"Se ejecuto el BuildCommand{Environment.NewLine}", result);
+            result.ShouldBe($"Se ejecuto el BuildCommand{Environment.NewLine}");
         }
     }
 }
