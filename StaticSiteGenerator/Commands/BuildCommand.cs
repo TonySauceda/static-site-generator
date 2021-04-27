@@ -1,12 +1,19 @@
 ﻿namespace StaticSiteGenerator.Commands
 {
-    using System;
+    using McMaster.Extensions.CommandLineUtils;
 
     public class BuildCommand
     {
+        private readonly IConsole console;
+
+        public BuildCommand(IConsole console)
+        {
+            this.console = console;
+        }
+
         public int OnExecute()
         {
-            Console.WriteLine("Se ejecuto el BuildCommand");
+            this.console.WriteLine("Se ejecuto el BuildCommand");
             return 0;
         }
     }
