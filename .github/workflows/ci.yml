@@ -1,0 +1,20 @@
+name: SSG Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: action/checkout@v1
+
+      - name: Configuración .NET
+        uses: actions/setup/dotnet@v1
+        with:
+          dotnet-version: "5.0.x"
+
+      - name: Compilar aplicación
+        run: |
+          dotnet build
