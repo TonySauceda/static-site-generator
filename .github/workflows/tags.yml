@@ -32,4 +32,4 @@ jobs:
 
       - name: Publicar a NuGet
         run: |
-          dotnet nuget push -k ${{ secrets.NUGET_KEY }} -s https://www.nuget.org StaticSiteGenerator/nupkg
+          dotnet nuget push -k ${{ secrets.NUGET_KEY }} -s https://www.nuget.org StaticSiteGenerator/nupkg/
