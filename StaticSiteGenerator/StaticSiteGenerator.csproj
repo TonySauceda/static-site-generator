@@ -10,8 +10,8 @@
     <PackageOutputPath>./nupkg</PackageOutputPath>
 
     <PackageId>SSG.Test</PackageId>
-    <AssemblyVersion>0.0.1</AssemblyVersion>
-    <Version>0.0.1</Version>
+    <AssemblyVersion>0.0.2</AssemblyVersion>
+    <Version>0.0.2</Version>
 
     <Authors>Tony Sauceda</Authors>
     <Title>Static Site Generator</Title>
