@@ -4,6 +4,25 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>ssg</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+
+    <PackageId>SSG.Test</PackageId>
+    <AssemblyVersion>0.0.1</AssemblyVersion>
+    <Version>0.0.1</Version>
+
+    <Authors>Tony Sauceda</Authors>
+    <Title>Static Site Generator</Title>
+    <PackageDescription>.NET Tool para generar sitios web estáticos</PackageDescription>
+    <Description>.NET Tool para generar sitios web estáticos</Description>
+    <PackageLicenceExpression>MIT</PackageLicenceExpression>
+    <PackageProjectUrl>https://github.com/TonySauceda/static-site-generator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TonySauceda/static-site-generator</RepositoryUrl>
+    <!-- <PackageIcon>icon.png</PackageIcon> -->
+    <PackageTags>static;website;static-website;website-generator</PackageTags>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.1.0" />

@@ -1,0 +1,35 @@
+name: Tags Pipeline
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Configuración .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "5.0.x"
+
+      - name: Compilar aplicación
+        run: |
+          dotnet build
+
+      - name: Probar aplicación
+        run: |
+          dotnet test
+
+      - name: Empaquetar aplicación
+        run: |
+          dotnet pack -c Release
+
+      - name: Publicar a NuGet
+        run: |
+          dotnet nuget push -k ${{ secrets.NUGET_KEY }} -s https://www.nuget.org StaticSiteGenerator/nupkg
