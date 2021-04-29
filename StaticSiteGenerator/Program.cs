@@ -2,6 +2,7 @@ namespace StaticSiteGenerator
 {
     using McMaster.Extensions.CommandLineUtils;
     using Microsoft.Extensions.DependencyInjection;
+    using StaticSiteGenerator.Builder;
     using StaticSiteGenerator.Commands;
 
     [Command("Static Site Generator")]
@@ -14,6 +15,7 @@ namespace StaticSiteGenerator
         public static int Main(string[] args)
         {
             var services = new ServiceCollection()
+                .AddSingleton<ISiteBuilder, CLISiteBuilder>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
                 .BuildServiceProvider();
 
