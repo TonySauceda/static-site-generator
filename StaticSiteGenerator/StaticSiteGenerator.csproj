@@ -31,6 +31,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="System.IO.Abstractions" Version="13.2.29" />
   </ItemGroup>
   <PropertyGroup>
     <CodeAnalysisRuleSet>../style.ruleset</CodeAnalysisRuleSet>

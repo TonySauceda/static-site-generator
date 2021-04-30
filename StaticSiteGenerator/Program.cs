@@ -4,6 +4,7 @@ namespace StaticSiteGenerator
     using Microsoft.Extensions.DependencyInjection;
     using StaticSiteGenerator.Builder;
     using StaticSiteGenerator.Commands;
+    using System.IO.Abstractions;
 
     [Command("Static Site Generator")]
     [VersionOptionFromMember("--version", MemberName = nameof(Version))]
@@ -15,6 +16,7 @@ namespace StaticSiteGenerator
         public static int Main(string[] args)
         {
             var services = new ServiceCollection()
+                .AddSingleton<IFileSystem, FileSystem>()
                 .AddSingleton<ISiteBuilder, CLISiteBuilder>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
                 .BuildServiceProvider();
