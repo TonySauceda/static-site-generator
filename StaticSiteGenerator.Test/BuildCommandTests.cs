@@ -3,24 +3,26 @@ using StaticSiteGenerator.Test.Utils;
 using System;
 using Xunit;
 using Shouldly;
+using Moq;
+using StaticSiteGenerator.Builder;
 
 namespace StaticSiteGenerator.Test
 {
     public class BuildCommandTests
     {
         [Fact]
-        public void TestWriteToConsole()
+        public void TestSiteBuilderBuildRuns()
         {
             // Setup
             var testConsole = new TestConsole();
-            var buildCommand = new BuildCommand(testConsole);
+            var mockSiteBuilder = new Mock<ISiteBuilder>();
+            var buildCommand = new BuildCommand(testConsole, mockSiteBuilder.Object);
 
             // Act
             buildCommand.OnExecute();
 
             // Assert
-            string result = testConsole.GetWrittenContent();
-            result.ShouldBe($"Se ejecuto el BuildCommand{Environment.NewLine}");
+            mockSiteBuilder.Verify(x => x.Build("./", "./_site"), Times.Once);
         }
     }
 }
