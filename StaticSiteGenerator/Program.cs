@@ -10,7 +10,7 @@ namespace StaticSiteGenerator
     [Subcommand(typeof(BuildCommand))]
     public class Program
     {
-        public string Version { get; } = "0.0.3";
+        public string Version { get; } = "0.0.4";
 
         public static int Main(string[] args)
         {
