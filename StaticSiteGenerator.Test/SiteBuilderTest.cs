@@ -1,5 +1,6 @@
 ﻿namespace StaticSiteGenerator.Test
 {
+    using Moq;
     using Shouldly;
     using StaticSiteGenerator.Builder;
     using System.IO.Abstractions;
@@ -28,7 +29,7 @@
 
             // Assert setup
             fakeFileSystem.File.Exists(fakeFilePath).ShouldBeTrue();
-            
+
             var siteBuilder = new CLISiteBuilder(fakeFileSystem);
 
 
@@ -57,6 +58,21 @@
             fakeFileSystem.Directory.Exists(output).ShouldBeTrue();
             fakeFileSystem.Directory.EnumerateFiles(output).Any().ShouldBeFalse();
             fakeFileSystem.Directory.EnumerateDirectories(output).Any().ShouldBeFalse();
+        }
+
+        [Fact]
+        public void TestBuildCallsClean()
+        {
+            // Setup
+            var mockSiteBuilder = new Mock<CLISiteBuilder>(MockBehavior.Strict, this.fakeFileSystem);
+            mockSiteBuilder.Setup(x => x.CleanFolder(output));//Para que no se ejecute el contenido de la funcion, ya que no entra en el scope de la prueba
+            var siteBuilder = mockSiteBuilder.Object;
+
+            // Act
+            siteBuilder.Build(input, output);
+
+            // Assert
+            mockSiteBuilder.Verify(x => x.CleanFolder(output));
         }
     }
 }

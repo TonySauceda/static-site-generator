@@ -11,7 +11,7 @@
             this.fileSystem = fileSystem;
         }
 
-        public void CleanFolder(string folder)
+        public virtual void CleanFolder(string folder)
         {
             if (this.fileSystem.Directory.Exists(folder))
             {
