@@ -5,6 +5,7 @@
     using System.IO.Abstractions;
     using System.Linq;
     using System.Text;
+    using DotLiquid;
 
     public class CLISiteBuilder : ISiteBuilder
     {
@@ -102,6 +103,29 @@
                 Title = dic["title"],
                 Date = DateTime.Parse(dic["date"]),
             };
+        }
+
+        public virtual string RenderContent(RawPostMetadata metadata, string content, string inputPath)
+        {
+            Template.FileSystem = new FileSystemHelper(this.fileSystem, inputPath);
+
+            var contentWrapper = new StringBuilder();
+            contentWrapper.Append("{% extends base %}").AppendLine();
+            contentWrapper.Append("{% block post_content %}").AppendLine();
+            contentWrapper.Append(content).AppendLine();
+            contentWrapper.Append("{% endblock %}");
+
+            var template = Template.Parse(contentWrapper.ToString());
+
+            var postVariables = new
+            {
+                title = metadata.Title,
+                date = metadata.Date,
+            };
+
+            var rendetedContent = template.Render(Hash.FromAnonymousObject(postVariables));
+
+            return rendetedContent;
         }
 
         private void CopyFiles(IDirectoryInfo source, IDirectoryInfo target)
