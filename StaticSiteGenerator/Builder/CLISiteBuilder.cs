@@ -40,6 +40,9 @@
             this.CleanFolder(outputPath);
             this.CopyFiles(inputPath, outputPath);
 
+            var filesToDelete = this.fileSystem.Directory.GetFiles(outputPath, "*.*", System.IO.SearchOption.AllDirectories);
+            var directoriesToDelete = this.fileSystem.Directory.GetDirectories(outputPath);
+
             var rawPosts = this.GetPosts(inputPath);
             var slugHelper = new SlugHelper();
 
@@ -54,6 +57,16 @@
                 var outputPostPath = this.fileSystem.Path.Combine(outputPath, $"{postSlug}.html");
 
                 this.fileSystem.File.WriteAllText(outputPostPath, renderedPost);
+            }
+
+            foreach (var file in filesToDelete)
+            {
+                this.fileSystem.File.Delete(file);
+            }
+
+            foreach (var dir in directoriesToDelete)
+            {
+                this.fileSystem.Directory.Delete(dir);
             }
         }
 
