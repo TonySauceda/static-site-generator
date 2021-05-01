@@ -1,13 +1,17 @@
 ﻿namespace StaticSiteGenerator.Test
 {
+    using AngleSharp;
+    using AngleSharp.Dom;
     using Moq;
     using Shouldly;
     using StaticSiteGenerator.Builder;
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.IO.Abstractions;
     using System.IO.Abstractions.TestingHelpers;
     using System.Linq;
+    using System.Threading.Tasks;
     using Xunit;
 
     public class SiteBuilderTest
@@ -123,12 +127,47 @@
             posts.ShouldBe(fileContets);
         }
 
+        [Fact]
+        public async Task TestRenderContent()
+        {
+            // Setup
+            var workSpace = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "../../../../"));
+            var templatePath = Path.Combine(workSpace, "StaticSiteGenerator", "Demo", "templates");
+            var dictionary = new Dictionary<string, MockFileData>();
+
+            foreach (var path in Directory.EnumerateFiles(templatePath))
+            {
+                var fakePath = path.Replace(templatePath, Path.Combine(input, "templates"));
+                dictionary.Add(fakePath, new MockFileData(File.ReadAllBytes(path)));
+            }
+
+            var fakeFileSystem = new MockFileSystem(dictionary);
+            var metadata = new RawPostMetadata() { Title = "Test post", Date = new DateTime(2021, 05, 1) };
+            var postContent = "Hola mundo" + Environment.NewLine + "Hola";
+            var siteBuilder = new CLISiteBuilder(fakeFileSystem);
+
+            // Act
+            string convertedPost = siteBuilder.RenderContent(metadata, postContent, input);
+
+            // Assert
+            var html = await this.ParseHtml(convertedPost);
+            var h1 = html.All.First(x => x.LocalName == "h1");
+
+            h1.TextContent.ShouldBe("Test post");
+        }
+
 
         private void AssertDirectoryIsEmpty(string output)
         {
             fakeFileSystem.Directory.Exists(output).ShouldBeTrue();
             fakeFileSystem.Directory.EnumerateFiles(output).Any().ShouldBeFalse();
             fakeFileSystem.Directory.EnumerateDirectories(output).Any().ShouldBeFalse();
+        }
+
+        private async Task<IDocument> ParseHtml(string document)
+        {
+            var context = BrowsingContext.New(Configuration.Default);
+            return await context.OpenAsync(x => x.Content(document));
         }
     }
 }

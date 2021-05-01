@@ -109,11 +109,10 @@
         {
             Template.FileSystem = new FileSystemHelper(this.fileSystem, inputPath);
 
-            var contentWrapper = new StringBuilder();
-            contentWrapper.Append("{% extends base %}").AppendLine();
-            contentWrapper.Append("{% block post_content %}").AppendLine();
-            contentWrapper.Append(content).AppendLine();
-            contentWrapper.Append("{% endblock %}");
+            var contentWrapper = @"{% extends post %}
+{% block post_content %}
+" + content + @"
+{% endblock %}";
 
             var template = Template.Parse(contentWrapper.ToString());
 
