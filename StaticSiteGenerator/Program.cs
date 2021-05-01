@@ -1,4 +1,4 @@
-﻿namespace StaticSiteGenerator
+namespace StaticSiteGenerator
 {
     using System.IO.Abstractions;
     using McMaster.Extensions.CommandLineUtils;
@@ -11,7 +11,7 @@
     [Subcommand(typeof(BuildCommand))]
     public class Program
     {
-        public string Version { get; } = "0.0.5";
+        public string Version { get; } = "0.0.6";
 
         public static int Main(string[] args)
         {
