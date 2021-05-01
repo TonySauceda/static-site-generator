@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Text;
     using DotLiquid;
+    using Slugify;
 
     public class CLISiteBuilder : ISiteBuilder
     {
@@ -40,12 +41,19 @@
             this.CopyFiles(inputPath, outputPath);
 
             var rawPosts = this.GetPosts(inputPath);
+            var slugHelper = new SlugHelper();
 
             foreach (var rawPost in rawPosts)
             {
                 var post = this.SplitPost(rawPost);
                 var metadata = this.ConvertMetadata(post.Item1);
                 var content = post.Item2;
+
+                var renderedPost = this.RenderContent(metadata, content, inputPath);
+                var postSlug = slugHelper.GenerateSlug(metadata.Title);
+                var outputPostPath = this.fileSystem.Path.Combine(outputPath, $"{postSlug}.html");
+
+                this.fileSystem.File.WriteAllText(outputPostPath, renderedPost);
             }
         }
 
@@ -55,7 +63,7 @@
 
             if (this.fileSystem.Directory.Exists(inputPostsPath))
             {
-                foreach (var file in this.fileSystem.Directory.EnumerateFiles(inputPath, "*.*", System.IO.SearchOption.AllDirectories))
+                foreach (var file in this.fileSystem.Directory.EnumerateFiles(inputPostsPath, "*.*", System.IO.SearchOption.AllDirectories))
                 {
                     yield return this.fileSystem.File.ReadAllText(file);
                 }
@@ -92,7 +100,7 @@
         {
             var metadataEntries = metadata
                 .Split(Environment.NewLine)
-                .Where(x => !string.IsNullOrEmpty(x))
+                .Where(x => !string.IsNullOrWhiteSpace(x))
                 .Select(x => x.Split(':', 2))
                 .Select(x => KeyValuePair.Create(x[0].Trim().ToLower(), x[1].Trim()));
 

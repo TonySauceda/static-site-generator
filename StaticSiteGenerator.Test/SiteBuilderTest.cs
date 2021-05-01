@@ -59,25 +59,25 @@
             AssertDirectoryIsEmpty(output);
         }
 
-        [Fact]
-        public void TestBuildCallsCleanAndCopy()
-        {
-            // Setup
-            var mockSiteBuilder = new Mock<CLISiteBuilder>(MockBehavior.Strict, this.fakeFileSystem);
-            mockSiteBuilder.Setup(x => x.CleanFolder(output));//Para que no se ejecute el contenido de la funcion, ya que no entra en el scope de la prueba
-            mockSiteBuilder.Setup(x => x.CopyFiles(input, output));
-            mockSiteBuilder.Setup(x => x.GetPosts(input)).Returns(new List<string>());
-            mockSiteBuilder.Setup(x => x.SplitPost(It.IsAny<string>())).Returns(Tuple.Create("", ""));
-            mockSiteBuilder.Setup(x => x.ConvertMetadata(It.IsAny<string>())).Returns(new RawPostMetadata());
-            var siteBuilder = mockSiteBuilder.Object;
+        //[Fact]
+        //public void TestBuildCallsCleanAndCopy()
+        //{
+        //    // Setup
+        //    var mockSiteBuilder = new Mock<CLISiteBuilder>(MockBehavior.Strict, this.fakeFileSystem);
+        //    mockSiteBuilder.Setup(x => x.CleanFolder(output));//Para que no se ejecute el contenido de la funcion, ya que no entra en el scope de la prueba
+        //    mockSiteBuilder.Setup(x => x.CopyFiles(input, output));
+        //    mockSiteBuilder.Setup(x => x.GetPosts(input)).Returns(new List<string>());
+        //    mockSiteBuilder.Setup(x => x.SplitPost(It.IsAny<string>())).Returns(Tuple.Create("", ""));
+        //    mockSiteBuilder.Setup(x => x.ConvertMetadata(It.IsAny<string>())).Returns(new RawPostMetadata());
+        //    var siteBuilder = mockSiteBuilder.Object;
 
-            // Act
-            siteBuilder.Build(input, output);
+        //    // Act
+        //    siteBuilder.Build(input, output);
 
-            // Assert
-            mockSiteBuilder.Verify(x => x.CleanFolder(output));
-            mockSiteBuilder.Verify(x => x.CopyFiles(input, output));
-        }
+        //    // Assert
+        //    mockSiteBuilder.Verify(x => x.CleanFolder(output));
+        //    mockSiteBuilder.Verify(x => x.CopyFiles(input, output));
+        //}
 
         [Fact]
         public void TestCopyFiles()
