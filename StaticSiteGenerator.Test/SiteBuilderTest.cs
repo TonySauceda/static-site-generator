@@ -95,6 +95,31 @@
             fakeFIleSystem.Directory.EnumerateFiles(output, "*.*", System.IO.SearchOption.AllDirectories).Count().ShouldBe(2);
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        public void TestGetPostsWithSinglePost(int files)
+        {
+            var postsPath = this.fakeFileSystem.Path.Combine(input, "posts");
+            this.fakeFileSystem.Directory.CreateDirectory(postsPath);
+            var fileContets = new List<string>();
+            for (int i = 0; i < files; i++)
+            {
+                var postPath = this.fakeFileSystem.Path.Combine(postsPath, $"file_{i}.txt");
+                var content = $"# Hola mundo!\n\nPrueba: {i}";
+                this.fakeFileSystem.File.WriteAllText(postPath, content);
+                fileContets.Add(content);
+            }
+
+            var siteBuilder = new CLISiteBuilder(this.fakeFileSystem);
+
+            var posts = siteBuilder.GetPosts(input);
+
+            posts.ShouldBe(fileContets);
+        }
+
+
         private void AssertDirectoryIsEmpty(string output)
         {
             fakeFileSystem.Directory.Exists(output).ShouldBeTrue();

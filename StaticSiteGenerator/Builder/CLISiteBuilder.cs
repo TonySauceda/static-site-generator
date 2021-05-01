@@ -1,6 +1,7 @@
 ﻿namespace StaticSiteGenerator.Builder
 {
     using System;
+    using System.Collections.Generic;
     using System.IO.Abstractions;
 
     public class CLISiteBuilder : ISiteBuilder
@@ -22,7 +23,7 @@
             this.fileSystem.Directory.CreateDirectory(folder);
         }
 
-        public virtual void CopyFiles(string input,string output)
+        public virtual void CopyFiles(string input, string output)
         {
             var source = this.fileSystem.DirectoryInfo.FromDirectoryName(input);
             var target = this.fileSystem.DirectoryInfo.FromDirectoryName(output);
@@ -34,6 +35,19 @@
         {
             this.CleanFolder(outputPath);
             this.CopyFiles(inputPath, outputPath);
+        }
+
+        public virtual IEnumerable<string> GetPosts(string inputPath)
+        {
+            var inputPostsPath = this.fileSystem.Path.Combine(inputPath, "posts");
+
+            if (this.fileSystem.Directory.Exists(inputPostsPath))
+            {
+                foreach (var file in this.fileSystem.Directory.EnumerateFiles(inputPath, "*.*", System.IO.SearchOption.AllDirectories))
+                {
+                    yield return this.fileSystem.File.ReadAllText(file);
+                }
+            }
         }
 
         private void CopyFiles(IDirectoryInfo source, IDirectoryInfo target)
