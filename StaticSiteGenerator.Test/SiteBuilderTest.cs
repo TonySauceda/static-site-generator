@@ -3,6 +3,7 @@
     using Moq;
     using Shouldly;
     using StaticSiteGenerator.Builder;
+    using System;
     using System.Collections.Generic;
     using System.IO.Abstractions;
     using System.IO.Abstractions.TestingHelpers;
@@ -61,6 +62,9 @@
             var mockSiteBuilder = new Mock<CLISiteBuilder>(MockBehavior.Strict, this.fakeFileSystem);
             mockSiteBuilder.Setup(x => x.CleanFolder(output));//Para que no se ejecute el contenido de la funcion, ya que no entra en el scope de la prueba
             mockSiteBuilder.Setup(x => x.CopyFiles(input, output));
+            mockSiteBuilder.Setup(x => x.GetPosts(input)).Returns(new List<string>());
+            mockSiteBuilder.Setup(x => x.SplitPost(It.IsAny<string>())).Returns(Tuple.Create("", ""));
+            mockSiteBuilder.Setup(x => x.ConvertMetadata(It.IsAny<string>())).Returns(new RawPostMetadata());
             var siteBuilder = mockSiteBuilder.Object;
 
             // Act
