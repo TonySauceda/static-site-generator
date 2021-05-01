@@ -1,10 +1,10 @@
-namespace StaticSiteGenerator
+﻿namespace StaticSiteGenerator
 {
+    using System.IO.Abstractions;
     using McMaster.Extensions.CommandLineUtils;
     using Microsoft.Extensions.DependencyInjection;
     using StaticSiteGenerator.Builder;
     using StaticSiteGenerator.Commands;
-    using System.IO.Abstractions;
 
     [Command("Static Site Generator")]
     [VersionOptionFromMember("--version", MemberName = nameof(Version))]
